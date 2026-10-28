@@ -1,0 +1,190 @@
+{
+  "model": "envelope features + GBM",
+  "cells": {
+    "A": {
+      "accuracy": 0.9925,
+      "macro_recall": 0.9924999999999999,
+      "per_class_recall": {
+        "normal": 1.0,
+        "outer_race": 0.996,
+        "inner_race": 0.99,
+        "ball": 0.984
+      },
+      "confusion_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.996,
+          0.004,
+          0.0
+        ],
+        [
+          0.0,
+          0.002,
+          0.99,
+          0.008
+        ],
+        [
+          0.002,
+          0.0,
+          0.014,
+          0.984
+        ]
+      ],
+      "n": 2000
+    },
+    "B": {
+      "accuracy": 0.972,
+      "macro_recall": 0.972,
+      "per_class_recall": {
+        "normal": 1.0,
+        "outer_race": 0.974,
+        "inner_race": 0.966,
+        "ball": 0.948
+      },
+      "confusion_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.006,
+          0.974,
+          0.006,
+          0.014
+        ],
+        [
+          0.014,
+          0.004,
+          0.966,
+          0.016
+        ],
+        [
+          0.01,
+          0.004,
+          0.038,
+          0.948
+        ]
+      ],
+      "n": 2000
+    },
+    "C": {
+      "accuracy": 0.922,
+      "macro_recall": 0.9219999999999999,
+      "per_class_recall": {
+        "normal": 1.0,
+        "outer_race": 0.892,
+        "inner_race": 0.94,
+        "ball": 0.856
+      },
+      "confusion_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.034,
+          0.892,
+          0.068,
+          0.006
+        ],
+        [
+          0.046,
+          0.0,
+          0.94,
+          0.014
+        ],
+        [
+          0.06,
+          0.004,
+          0.08,
+          0.856
+        ]
+      ],
+      "n": 2000
+    },
+    "D": {
+      "accuracy": 0.8315,
+      "macro_recall": 0.8315000000000001,
+      "per_class_recall": {
+        "normal": 0.998,
+        "outer_race": 0.65,
+        "inner_race": 0.902,
+        "ball": 0.776
+      },
+      "confusion_matrix": [
+        [
+          0.998,
+          0.0,
+          0.002,
+          0.0
+        ],
+        [
+          0.132,
+          0.65,
+          0.178,
+          0.04
+        ],
+        [
+          0.078,
+          0.0,
+          0.902,
+          0.02
+        ],
+        [
+          0.104,
+          0.0,
+          0.12,
+          0.776
+        ]
+      ],
+      "n": 2000
+    }
+  },
+  "domain_gap": {
+    "in_domain_accuracy": 0.9925,
+    "mean_out_of_domain_accuracy": 0.9085000000000001,
+    "worst_out_of_domain_accuracy": 0.8315,
+    "mean_drop": 0.08399999999999996,
+    "worst_drop": 0.16100000000000003
+  },
+  "n_features": 24,
+  "feature_names": [
+    "env_outer_race_h1",
+    "env_outer_race_h2",
+    "env_outer_race_h3",
+    "env_inner_race_h1",
+    "env_inner_race_h2",
+    "env_inner_race_h3",
+    "env_ball_h1",
+    "env_ball_h2",
+    "env_ball_h3",
+    "sideband_inner_shaft",
+    "sideband_ball_cage",
+    "env_shaft_h1",
+    "band_centre_norm",
+    "band_width_norm",
+    "band_kurtosis",
+    "time_kurtosis",
+    "crest_factor",
+    "skewness",
+    "shape_factor",
+    "impulse_factor",
+    "clearance_factor",
+    "rms_to_peak",
+    "spectral_centroid_norm",
+    "spectral_entropy"
+  ],
+  "feature_extraction_seconds": 438.9,
+  "fit_seconds": 12.79,
+  "n_train": 6000
+}

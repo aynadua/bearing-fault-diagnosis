@@ -1,0 +1,162 @@
+{
+  "model": "CNN (order)",
+  "cells": {
+    "A": {
+      "accuracy": 1.0,
+      "macro_recall": 1.0,
+      "per_class_recall": {
+        "normal": 1.0,
+        "outer_race": 1.0,
+        "inner_race": 1.0,
+        "ball": 1.0
+      },
+      "confusion_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "n": 2000
+    },
+    "B": {
+      "accuracy": 0.961,
+      "macro_recall": 0.961,
+      "per_class_recall": {
+        "normal": 1.0,
+        "outer_race": 0.938,
+        "inner_race": 0.976,
+        "ball": 0.93
+      },
+      "confusion_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.062,
+          0.938,
+          0.0,
+          0.0
+        ],
+        [
+          0.024,
+          0.0,
+          0.976,
+          0.0
+        ],
+        [
+          0.054,
+          0.0,
+          0.016,
+          0.93
+        ]
+      ],
+      "n": 2000
+    },
+    "C": {
+      "accuracy": 0.399,
+      "macro_recall": 0.39899999999999997,
+      "per_class_recall": {
+        "normal": 1.0,
+        "outer_race": 0.228,
+        "inner_race": 0.18,
+        "ball": 0.188
+      },
+      "confusion_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.772,
+          0.228,
+          0.0,
+          0.0
+        ],
+        [
+          0.82,
+          0.0,
+          0.18,
+          0.0
+        ],
+        [
+          0.812,
+          0.0,
+          0.0,
+          0.188
+        ]
+      ],
+      "n": 2000
+    },
+    "D": {
+      "accuracy": 0.25,
+      "macro_recall": 0.25,
+      "per_class_recall": {
+        "normal": 1.0,
+        "outer_race": 0.0,
+        "inner_race": 0.0,
+        "ball": 0.0
+      },
+      "confusion_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "n": 2000
+    }
+  },
+  "domain_gap": {
+    "in_domain_accuracy": 1.0,
+    "mean_out_of_domain_accuracy": 0.5366666666666666,
+    "worst_out_of_domain_accuracy": 0.25,
+    "mean_drop": 0.4633333333333334,
+    "worst_drop": 0.75
+  },
+  "n_parameters": 32868,
+  "best_val_accuracy": 1.0
+}

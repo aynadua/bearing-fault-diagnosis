@@ -1,0 +1,30 @@
+# The mitigation experiment: train on two well-separated speeds instead of one.
+rig:
+  sample_rate: 12000.0
+  n_samples: 4096
+  samples_per_rev: 512
+  order_revolutions: 8
+
+domains:
+  source: ["A", "C"]               # 1500 and 2400 rpm
+  targets: ["A", "B", "C", "D"]
+
+data:
+  per_class:
+    train: 750     # half per source condition, so the total training set matches default.yaml
+    val: 150
+    test: 500
+  seeds:
+    train: 101
+    val: 202
+    test: 303
+  out_dir: data
+
+train:
+  epochs: 25
+  batch_size: 128
+  lr: 0.002
+  weight_decay: 0.0001
+  patience: 6
+  seed: 7
+  width: 32

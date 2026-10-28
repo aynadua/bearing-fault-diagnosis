@@ -1,0 +1,30 @@
+# Train on one operating condition, test on all four.
+rig:
+  sample_rate: 12000.0   # CWRU drive-end rate
+  n_samples: 4096        # 0.34 s
+  samples_per_rev: 512   # angular resolution; must keep the resonance below Nyquist
+  order_revolutions: 8   # 8 revs x 512 = 4096 samples, matching the raw input length
+
+domains:
+  source: ["A"]                    # 1500 rpm
+  targets: ["A", "B", "C", "D"]    # 1500 / 1800 / 2400 / 3000 rpm
+
+data:
+  per_class:
+    train: 1500
+    val: 300
+    test: 500
+  seeds:
+    train: 101
+    val: 202
+    test: 303
+  out_dir: data
+
+train:
+  epochs: 25
+  batch_size: 128
+  lr: 0.002
+  weight_decay: 0.0001
+  patience: 6
+  seed: 7
+  width: 32
