@@ -1,7 +1,7 @@
 # Bearing fault diagnosis under operating-condition shift
 
 Detect rolling-element bearing faults from vibration, and measure what happens
-when the machine changes speed — which is the thing that actually breaks
+when the machine changes speed, which is the thing that actually breaks
 predictive-maintenance models in the field.
 
 A 1D CNN reaches **100% accuracy on the speed it was trained at and 29% at
@@ -52,13 +52,13 @@ records; chance is 0.25.
 
 Three things in that table are worth reading carefully.
 
-**The raw CNN is perfect in-domain and useless out of it.** 1.000 at A, 0.293
-at D. If this were validated the usual way — one operating condition, random
-split — it would ship as a 100% accurate fault detector and then fail silently
+The raw CNN is perfect in-domain and useless out of it: 1.000 at A, 0.293
+at D. Validated the usual way (one operating condition, random split) it
+would ship as a 100% accurate fault detector and then fail silently
 the first time the drive changed speed. The in-domain number is not wrong; it
 is just measuring something other than fault detection.
 
-**Order tracking alone does not fix it, and the reason is interesting.**
+Order tracking alone does not fix it, and the reason is interesting.
 Resampling from constant time steps to constant shaft *angle* pins the fault
 repetition rate: an outer-race fault sits at 3.58× shaft rate whatever the
 speed, which this repo verifies to within one FFT bin at all four conditions.
@@ -67,7 +67,7 @@ speed, which this repo verifies to within one FFT bin at all four conditions.
 
 So why does the order-domain CNN still collapse at C and D? Because the fault
 rate is not the only thing in the signal. The impacts excite a *structural
-resonance*, which rings at a fixed frequency in hertz — and a fixed frequency
+resonance*, which rings at a fixed frequency in hertz. A fixed frequency
 in hertz is a *moving* frequency in orders:
 
 | Condition | Shaft | A 3.5 kHz resonance, in orders |
@@ -80,14 +80,14 @@ in hertz is a *moving* frequency in orders:
 Order tracking fixes the modulation and moves the carrier. The network, which
 reads the waveform rather than the fault rate, follows the carrier.
 
-**Demodulating first does fix it.** Band-pass around the resonance, take the
+Demodulating first does fix it. Band-pass around the resonance, take the
 Hilbert envelope, *then* resample by angle. The carrier is gone, and what
-remains — the impact pattern — is genuinely speed-invariant. Worst-case
+remains, the impact pattern, is genuinely speed-invariant. Worst-case
 accuracy goes from 0.293 to 0.758, a 2.6× improvement, from changing the
 representation rather than the network. Same architecture, same
 hyperparameters, same training data.
 
-**The classical baseline still wins out of domain**, at 0.832 against 0.758.
+The classical baseline still wins out of domain, at 0.832 against 0.758.
 That is the honest headline. Hand-built features that evaluate energy at
 frequencies *predicted from bearing geometry and measured shaft speed* carry
 the invariance by construction, and a network has to learn it from data that
@@ -99,8 +99,8 @@ physics is still the better bet.
 ### The bearing
 
 Geometry is the SKF 6205-2RS JEM used on the drive end of the Case Western
-Reserve University test rig — a real bearing, so the fault frequencies are
-real. The computed multipliers reproduce CWRU's published values exactly,
+Reserve University test rig. It is a real bearing, so the fault frequencies
+are real. The computed multipliers reproduce CWRU's published values exactly,
 which the test suite asserts:
 
 | | Computed | CWRU published |
@@ -123,16 +123,16 @@ s(t) = exp(−ζ·2π·f_n·t)·sin(2π·f_n·√(1−ζ²)·t)
 
 Three details carry the diagnosis:
 
-- **Random slip.** Rolling elements slip, so impacts are not exactly periodic
+- Rolling elements slip, so impacts are not exactly periodic
   (~1% jitter). This smears the raw spectrum, which is exactly why envelope
   analysis rather than plain FFT is the industry method.
-- **Load-zone modulation**, which is what separates the fault classes. An
+- Load-zone modulation, which is what separates the fault classes. An
   outer-race defect sits still in the load zone, so its impacts are
   unmodulated. An inner-race defect rotates with the shaft and is modulated at
   shaft rate. A ball defect rotates with the cage and is modulated at FTF.
   Those modulations appear as sidebands, and the feature extractor measures
   them explicitly.
-- **Severity as a nuisance variable**, drawn at random and never shown to the
+- Severity acts as a nuisance variable, drawn at random and never shown to the
   model, so it cannot use loudness as a proxy for fault type.
 
 Records are 4096 samples at 12 kHz (0.34 s), normalised to unit standard
@@ -146,14 +146,14 @@ actually live.
 
 What a vibration engineer computes, in order:
 
-1. **Kurtogram band selection** — split the spectrum at several resolutions,
+1. Kurtogram band selection: split the spectrum at several resolutions,
    band-pass each candidate, keep the band whose output is most impulsive.
-2. **Hilbert envelope**, then its spectrum: the resonance is a carrier, the
+2. Hilbert envelope, then its spectrum: the resonance is a carrier, the
    fault rate is the modulation, and demodulation recovers it.
-3. **Energy at the frequencies geometry predicts** — BPFO, BPFI, 2×BSF and
-   three harmonics each, plus the inner-race and ball sidebands — normalised
-   against the local noise floor.
-4. **Time-domain condition indicators**: kurtosis, crest factor, impulse and
+3. Energy at the frequencies geometry predicts: BPFO, BPFI, 2xBSF and three
+   harmonics each, plus the inner-race and ball sidebands, normalised against
+   the local noise floor.
+4. Time-domain condition indicators: kurtosis, crest factor, impulse and
    clearance factors.
 5. Gradient boosting over the resulting 24 features.
 
@@ -168,7 +168,7 @@ background:
 | inner race | 0.59 | **5.36** | 0.62 | 4.12 |
 | ball | 0.62 | 0.75 | **5.84** | 4.37 |
 
-Shaft speed is treated as known, because on real machinery it is — from a
+Shaft speed is treated as known, because on real machinery it is: from a
 tachometer, an encoder, or the drive itself. That is the asymmetry the whole
 experiment measures: the feature model is allowed to use speed, the
 raw-waveform CNN is not, and the gap between them is what that knowledge is
@@ -195,8 +195,8 @@ Simulates every condition, fits the baseline, trains all three CNNs, evaluates
 across conditions and writes `reports/`. About 20 minutes on 4 CPU cores. No
 GPU.
 
-A second experiment — does training on two well-separated speeds close the
-gap? — ships as a config:
+A second experiment ships as a config. Does training on two well-separated
+speeds close the gap?
 
 ```bash
 bfd --config configs/multi_source.yaml data && bfd --config configs/multi_source.yaml train --rep raw
@@ -218,14 +218,14 @@ separated speeds, with ground truth.
 
 The limits are real:
 
-- **The simulator has no unmodelled physics.** Real recordings carry gear
+- The simulator has no unmodelled physics. Real recordings carry gear
   mesh, structural resonances that move with temperature, sensor mounting
   effects and compound faults. The domain gap measured here is a *lower bound*
   on the real one.
-- **Its speed span is wider than CWRU's.** CWRU's four motor loads span
-  1730–1797 rpm, a 4% spread — far too small to expose this failure. The
+- Its speed span is wider than CWRU's. CWRU's four motor loads span
+  1730 to 1797 rpm, a 4% spread, far too small to expose this failure. The
   conditions here span 2×, which is ordinary for a variable-frequency drive.
-- **Four fault classes, one defect each.** No compound faults, no gradual
+- Four fault classes, one defect each. No compound faults, no gradual
   degradation, no remaining-useful-life estimate.
 
 `src/bfd/dataset.py` is where a CWRU `.mat` loader goes; everything downstream
@@ -233,17 +233,17 @@ takes `(N, n_samples)` float32 arrays plus a shaft speed per record.
 
 ## Limitations and next steps
 
-- **The physics baseline still wins out of domain.** The interesting follow-up
-  is whether a network trained with *explicit* speed conditioning — feeding
-  shaft rate as an input, as the feature model gets — closes the remaining
-  gap.
-- **Single-source training is the hardest case by design.** The multi-source
+- The physics baseline still wins out of domain. The interesting follow-up
+  is whether a network trained with *explicit* speed conditioning, feeding
+  shaft rate as an input the way the feature model gets it, closes the
+  remaining gap.
+- Single-source training is the hardest case by design. The multi-source
   config exists but is not in the headline table; training on A and C should
   substantially improve D, and quantifying that is the natural next experiment.
-- **No severity or remaining-useful-life output.** Fault *type* is only the
+- No severity or remaining-useful-life output. Fault *type* is only the
   first question a maintenance planner asks; "how long have I got" is the
   second, and this does not answer it.
-- **Shaft speed is assumed known and accurate.** Order tracking degrades when
+- Shaft speed is assumed known and accurate. Order tracking degrades when
   the tachometer is noisy, and that sensitivity is unmeasured here.
 
 ## Layout
@@ -260,6 +260,7 @@ src/bfd/
   dataset.py    per-condition datasets and the three representations
   evaluate.py   cross-domain scoring and the domain-gap summary
   plots.py      figures
+  config.py     typed config loaded from YAML
   cli.py        `bfd <stage>`
 tests/          78 tests, including the CWRU-multiplier and order-invariance checks
 ```
@@ -273,7 +274,7 @@ tests/          78 tests, including the CWRU-multiplier and order-invariance che
 - Case Western Reserve University Bearing Data Center, bearing geometry and
   published fault-frequency multipliers.
 - Zhao et al., *Deep learning algorithms for rotating machinery intelligent
-  diagnosis: an open source benchmark study*, ISA Transactions, 2020 — on how
+  diagnosis: an open source benchmark study*, ISA Transactions, 2020. On how
   much published accuracy survives an honest split.
 
 ## Licence
